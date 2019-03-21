@@ -1,0 +1,10 @@
+{
+  "devToolsPort": 19002,
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 36915,
+  "expoServerNgrokUrl": "https://zv-gh2.anonymous.hello-world.exp.direct",
+  "packagerNgrokUrl": "https://packager.zv-gh2.anonymous.hello-world.exp.direct",
+  "ngrokPid": 36927,
+  "webpackServerPort": null
+}
