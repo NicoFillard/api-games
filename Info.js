@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Linking } from 'react-native';
+import { StyleSheet, Text, View, Linking, AsyncStorage } from 'react-native';
 import { Button } from 'react-native-elements';
 import { connect } from 'react-redux';
 
@@ -18,6 +18,8 @@ class Info extends React.Component {
             .then((response) => response.json())
             .then((responseJson) => {
 
+                AsyncStorage.setItem('nameGame', responseJson.name);
+
                 this.setState({
                     isLoading: false,
                     gameName: responseJson.name,
@@ -35,9 +37,14 @@ class Info extends React.Component {
                 console.error(error);
             });
     }
+
     render() {
         return (
             <View style={styles.container}>
+                <Button title="Retour à la liste" type="outline" onPress={() =>{
+                    this.props.navigation.state.params.onNavigateBack(this.state.gameName),
+                    this.props.navigation.goBack()
+                }} />
                 <Text h1>{this.state.gameName}</Text>
                 <View>
                     <Text>Players : {this.state.gamePlayers}</Text>

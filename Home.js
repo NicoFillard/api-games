@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList, AsyncStorage } from 'react-native';
 import { connect } from 'react-redux';
 import App from './App';
 
@@ -11,10 +11,13 @@ function mapStateToProps(state) {
 class Home extends React.Component {
     constructor(props){
         super(props);
-        this.state ={ isLoading: true}
+        this.state ={
+            isLoading: true,
+            gameName: "",
+        }
     }
 
-    componentDidMount(){
+     componentDidMount(){
 
         return fetch('https://androidlessonsapi.herokuapp.com/api/game/list', {
             method: "GET"
@@ -22,17 +25,28 @@ class Home extends React.Component {
             .then((response) => response.json())
             .then((responseJson) => {
 
-                this.setState({
-                    isLoading: false,
-                    dataSource: responseJson,
-                }, function(){
+                AsyncStorage.getItem('nameGame').then(value => {
+                    console.log(value);
+                    this.setState({
+                        isLoading: false,
+                        dataSource: responseJson,
+                        lastGame: value,
+                    }, function(){
 
+                    });
                 });
-
             })
             .catch((error) =>{
                 console.error(error);
             });
+    }
+
+    handleOnNavigateBack = (gameName) => {
+        if (gameName) {
+            this.setState({
+                gameName
+            })
+        }
     }
 
     render() {
@@ -40,17 +54,20 @@ class Home extends React.Component {
             <View style={styles.container}>
                 <FlatList
                     data={this.state.dataSource}
-                    renderItem={({item}) => <Text style={styles.item} onPress={() => {
-                        this.props.navigation.navigate('Info', {id: item.id})
+                    renderItem={({item}) => <Text style={styles.item} onPress={() =>{
+                        this.props.navigation.navigate('Info', {
+                            id: item.id,
+                            onNavigateBack: this.handleOnNavigateBack
+                        })
                     }}>{item.name}</Text>}
                     keyExtractor={({id}) => id}
                 />
+                <Text>Le dernier jeu était : {this.state.gameName}</Text>
             </View>
         );
     }
 }
 export default connect(mapStateToProps)(Home);
-
 
 const styles = StyleSheet.create({
     container: {
