@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, AsyncStorage } from 'react-native';
+import { StyleSheet, Text, View, FlatList, AsyncStorage, Image } from 'react-native';
 import { connect } from 'react-redux';
 import App from './App';
 
@@ -52,6 +52,9 @@ class Home extends React.Component {
     render() {
         return (
             <View style={styles.container}>
+                <Image
+                    source={require('./assets/hello.png')}
+                />
                 <FlatList
                     data={this.state.dataSource}
                     renderItem={({item}) => <Text style={styles.item} onPress={() =>{
