@@ -40,7 +40,7 @@ class Info extends React.Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <View>
                 <Button title="Retour à la liste" type="outline" onPress={() =>{
                     this.props.navigation.state.params.onNavigateBack(this.state.gameName),
                     this.props.navigation.goBack()
@@ -51,7 +51,9 @@ class Info extends React.Component {
                     <Text>Type : {this.state.gameType}</Text>
                     <Text>Year : {this.state.gameYear}</Text>
                     <Text>Description : {this.state.gameDescription}</Text>
-                    <Button title="Page wikipédia" type="outline" onPress={() => Linking.openURL(`${this.state.gameUrl}`)} />
+                    <View style={styles.container}>
+                        <Button style={styles.button} title="Page wikipédia" type="outline" onPress={() => Linking.openURL(`${this.state.gameUrl}`)} />
+                    </View>
                 </View>
             </View>
         );
@@ -66,4 +68,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    button: {
+        padding: 20,
+    }
 });

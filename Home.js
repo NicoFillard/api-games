@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, FlatList, AsyncStorage, Image } from 'react-native';
+import { StyleSheet, Text, View, FlatList, AsyncStorage, Image, UIManager, LayoutAnimation, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import App from './App';
 
@@ -11,6 +11,7 @@ function mapStateToProps(state) {
 class Home extends React.Component {
     constructor(props){
         super(props);
+        UIManager.setLayoutAnimationEnabledExperimental && UIManager.setLayoutAnimationEnabledExperimental(true);
         this.state ={
             isLoading: true,
             gameName: "",
@@ -49,12 +50,20 @@ class Home extends React.Component {
         }
     }
 
+    _onPress = () => {
+        LayoutAnimation.spring();
+        this.setState({w: this.state.w + 15, h: this.state.h + 15})
+    }
+
     render() {
         return (
-            <View style={styles.container}>
-                <Image
-                    source={require('./assets/hello.png')}
-                />
+            <View style={[styles.container, {width: this.state.w, height: this.state.h}]}>
+                <TouchableOpacity onPress={this._onPress}>
+                    <Image
+                        source={require('./assets/hello.png')}
+                    />
+                </TouchableOpacity>
+
                 <FlatList
                     data={this.state.dataSource}
                     renderItem={({item}) => <Text style={styles.item} onPress={() =>{
@@ -63,7 +72,7 @@ class Home extends React.Component {
                             onNavigateBack: this.handleOnNavigateBack
                         })
                     }}>{item.name}</Text>}
-                    keyExtractor={({id}) => id}
+                    keyExtractor={({id}) => id.toString()}
                 />
                 <Text>Le dernier jeu était : {this.state.gameName}</Text>
             </View>
